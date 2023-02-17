@@ -1,5 +1,5 @@
 # Week 0 — Billing and Architecture
-# Week 0 — Billing and Architecture
+
 This journal details the processes I went through to complete the first bootcamp project.
 I will mostly be demonstrating using photos cropped from my personal AWS account and some AWS CLI code if need be.
 
