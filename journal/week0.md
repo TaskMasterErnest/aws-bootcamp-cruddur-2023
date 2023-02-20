@@ -120,5 +120,5 @@ After reviewing my app through all the pillars of the Well-Architected Framework
 
 - I created a EventBridge rule that links with Amazon SNS service to alert me when an even occurs with my AWS services.
 - I used this documentation to help me through the process, [EventBridge Setup Process](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-get-started.html)
-![](assets/Week0/AWSHealth01.png)
+![](assets/Week0/AWSHealth00.png)
 
