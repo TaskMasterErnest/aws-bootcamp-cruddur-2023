@@ -18,7 +18,7 @@
 - To access the information the backend is putting out in JSON, append `/api/activities/home` to the end of the URL the Flask server is running on. eg, `http://127.0.0.1:5000/api/activities/home`
 - Uninstall the dependencies installed using `pip3 uninstall -r requirements.txt -y `.
 
-## Creating a Dockerfile
+### Creating a Dockerfile
 - A Dockerfile is a configuration document that lists all the commands that Docker runs in order to create a container for a specific application.
 - Create a file called `Dockerfile` in the `/backend-flask` directory.
 - Add the following code to the Dockerfile:
@@ -38,7 +38,7 @@
 	CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
 	```
 
-## Build the Container
+### Build the Container
 - Building a container is to create a necessary environment that contains all the dependencies the application will need to run successfully.
 - See it as creating a perfect local environment for running an application.
 - Build the container image from the Dockerfile with the tag, backend-flask, using this command
@@ -47,7 +47,7 @@
 	```
 - It is important to run this command directly in the directory where the Dockerfile is situated; in this case, `/backend-flask` dir.
 
-## Run the Container
+### Run the Container
 - Running a container is starting it, essentially starting the environment in which it was built.
 - With Docker, there are soo many ways to run a container. For this container, we are going to add a few flags taht are useful to run it:
 	1. ensure container is removed when stopped with the `--rm` flag.
@@ -60,3 +60,58 @@
 	```
 - You specify the image you want to run as the container at the end of the `run` command eg. backend-flask.
 
+## Running the Frontend Locally
+- Testing the frontend to check if it will run locally.
+- In this test, make sure you have node and npm installed on local machine.
+- The frontend should return the Cruddur app page.
+	```Shell
+	# install nodejs and npm
+	curl -sL https://rpm.nodesource.com/setup_16.x -o nodesource_setup.sh
+	bash nodesource_setup.sh
+	dnf install nodejs
+	# check node and npm versions
+	nodejs -v
+	npm -v
+	# enter the frontend-react-js directory
+	cd frontend-react-js
+	npm install
+	npm run start
+	```
+- Access the information the frontend is putting forth by clicking the URL offers. `http://127.0.0.1:3000`.
+- Clear the local environment of the dependency modules installed by npm, by removing the node_modules package and package-lock.json package. 
+	```Shell
+	rm -rf node_modules
+	rm package-lock.json
+	```
+
+### Writing the Dockerfile
+-  Create the Dockerfile in the `/frontend-react-js` directory
+- Add the following to the Dockerfile:
+	```Dockerfile
+	FROM node:16.19
+
+	WORKDIR /frontend-react-js
+
+	COPY . /frontend-react-js
+
+	RUN npm install
+	
+	ENV PORT=3000
+	
+	EXPOSE ${PORT}
+	
+	CMD ["npm", "start"]
+	```
+	
+### Build the Container Image
+- Still in the `/frontend-react-js` directory, build the Docker image.
+- Use the preferable tag `frontend-react-js` to build the image.
+	```Shell
+	docker build -t frontend-react-js .
+	```
+
+### Run the Container
+- After building the container image, run the container to get the application working
+	```Shell
+	docker run -d -p 3000:3000 frontend-react-js
+	```
