@@ -115,3 +115,46 @@
 	```Shell
 	docker run -d -p 3000:3000 frontend-react-js
 	```
+
+## Docker Compose
+- Docker Compose is a tool for defining and running multi-container application in Docker.
+- It is a way to document and configure all the applications' service dependencies.
+- These configurations are written in the YAML format.
+- With this tool/plugin, a single command will pull, build and start containers for each dependency stated.
+
+### Creating the Docker Compose file
+- Go to the root of the application; out of any directory and into the root directory of where all the application code is documented.
+- Create a `docker-compose.yml` file.
+- Add the following code into the `docker-compose.yml` file. NB: We are working in the Gitpod workspace provided in the GitHub workspace.
+	```YAML
+	version: "3.8"
+	services:
+	  backend-app:
+	    environment:
+	      FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+	      BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+	    build: ./backend-flask
+	    ports:
+	      - "4567:4567"
+	    volumes:
+	      - ./backend-flask:/backend-flask
+	  frontend-app:
+	    environment:
+	      REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+	    build: ./frontend-react-js
+	    ports:
+	      - "3000:3000"
+	    volumes:
+	      - ./frontend-react-js:/frontend-react-js
+	
+	# the name flag is a hack to change the default prepend folder
+	# name when outputting the image names
+	networks: 
+	  internal-network:
+	    driver: bridge
+	    name: cruddur
+	```
+- The services represent the containers that will be run; with their environment variables and ports.
+- If the images are not already built or present, the `build:` command specifies which directory to enter and build the image from.
+- the `volumes:` command is to link a storage area on host machine to a place in the container.
+- the `networks:` section creates a network named `cruddur` that links both containers so that they can share information in the same network.
