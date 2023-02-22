@@ -1,1 +1,160 @@
 # Week 1 — App Containerization
+
+## Running the Python Backend Locally
+- Test the Python backend code to see it its running locally
+- Set the backend and frontend URLs so that we get some information.
+- The backend returns a json file so watch out for that.
+	```Shell
+	# enter the backend directory
+	cd backend-flask
+	# set the enviroment variables
+	export FRONTEND_URL="*"
+	export BACKEND_URL="*"
+	# install all dependencies
+	pip3 install -r requirements.txt
+	# run the python code with the flask module, set the host IP 
+	flask run --host=0.0.0.0
+	```
+- To access the information the backend is putting out in JSON, append `/api/activities/home` to the end of the URL the Flask server is running on. eg, `http://127.0.0.1:5000/api/activities/home`
+- Uninstall the dependencies installed using `pip3 uninstall -r requirements.txt -y `.
+
+### Creating a Dockerfile
+- A Dockerfile is a configuration document that lists all the commands that Docker runs in order to create a container for a specific application.
+- Create a file called `Dockerfile` in the `/backend-flask` directory.
+- Add the following code to the Dockerfile:
+	```Dockerfile
+	FROM python:3.10-slim-buster
+
+	WORKDIR /backend-flask
+
+	COPY requirements.txt requirements.txt
+	RUN pip3 install -r requirements.txt
+
+	COPY . .
+
+	ENV FLASK_ENV=development
+
+	EXPOSE ${PORT}
+	CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
+	```
+
+### Build the Container
+- Building a container is to create a necessary environment that contains all the dependencies the application will need to run successfully.
+- See it as creating a perfect local environment for running an application.
+- Build the container image from the Dockerfile with the tag, backend-flask, using this command
+	```Bash
+	docker build -t backend-flask .
+	```
+- It is important to run this command directly in the directory where the Dockerfile is situated; in this case, `/backend-flask` dir.
+
+### Run the Container
+- Running a container is starting it, essentially starting the environment in which it was built.
+- With Docker, there are soo many ways to run a container. For this container, we are going to add a few flags taht are useful to run it:
+	1. ensure container is removed when stopped with the `--rm` flag.
+	2. add ports for container to use with the `-p` flag.
+	3. add environment variables to use in container with `-e` flag.
+	4. ensure container is running in background with the `-d` flag.
+- The command to run the container turn out like this;
+	```Shell
+	docker run --rm -it -d -p 4567:4567 -e BACKEND_URL="*" -e FRONTEND_URL="*" backend-flask
+	```
+- You specify the image you want to run as the container at the end of the `run` command eg. backend-flask.
+
+## Running the Frontend Locally
+- Testing the frontend to check if it will run locally.
+- In this test, make sure you have node and npm installed on local machine.
+- The frontend should return the Cruddur app page.
+	```Shell
+	# install nodejs and npm
+	curl -sL https://rpm.nodesource.com/setup_16.x -o nodesource_setup.sh
+	bash nodesource_setup.sh
+	dnf install nodejs
+	# check node and npm versions
+	nodejs -v
+	npm -v
+	# enter the frontend-react-js directory
+	cd frontend-react-js
+	npm install
+	npm run start
+	```
+- Access the information the frontend is putting forth by clicking the URL offers. `http://127.0.0.1:3000`.
+- Clear the local environment of the dependency modules installed by npm, by removing the node_modules package and package-lock.json package. 
+	```Shell
+	rm -rf node_modules
+	rm package-lock.json
+	```
+
+### Writing the Dockerfile
+-  Create the Dockerfile in the `/frontend-react-js` directory
+- Add the following to the Dockerfile:
+	```Dockerfile
+	FROM node:16.19
+
+	WORKDIR /frontend-react-js
+
+	COPY . /frontend-react-js
+
+	RUN npm install
+	
+	ENV PORT=3000
+	
+	EXPOSE ${PORT}
+	
+	CMD ["npm", "start"]
+	```
+	
+### Build the Container Image
+- Still in the `/frontend-react-js` directory, build the Docker image.
+- Use the preferable tag `frontend-react-js` to build the image.
+	```Shell
+	docker build -t frontend-react-js .
+	```
+
+### Run the Container
+- After building the container image, run the container to get the application working
+	```Shell
+	docker run -d -p 3000:3000 frontend-react-js
+	```
+
+## Docker Compose
+- Docker Compose is a tool for defining and running multi-container application in Docker.
+- It is a way to document and configure all the applications' service dependencies.
+- These configurations are written in the YAML format.
+- With this tool/plugin, a single command will pull, build and start containers for each dependency stated.
+
+### Creating the Docker Compose file
+- Go to the root of the application; out of any directory and into the root directory of where all the application code is documented.
+- Create a `docker-compose.yml` file.
+- Add the following code into the `docker-compose.yml` file. NB: We are working in the Gitpod workspace provided in the GitHub workspace.
+	```YAML
+	version: "3.8"
+	services:
+	  backend-app:
+	    environment:
+	      FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+	      BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+	    build: ./backend-flask
+	    ports:
+	      - "4567:4567"
+	    volumes:
+	      - ./backend-flask:/backend-flask
+	  frontend-app:
+	    environment:
+	      REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+	    build: ./frontend-react-js
+	    ports:
+	      - "3000:3000"
+	    volumes:
+	      - ./frontend-react-js:/frontend-react-js
+	
+	# the name flag is a hack to change the default prepend folder
+	# name when outputting the image names
+	networks: 
+	  internal-network:
+	    driver: bridge
+	    name: cruddur
+	```
+- The services represent the containers that will be run; with their environment variables and ports.
+- If the images are not already built or present, the `build:` command specifies which directory to enter and build the image from.
+- the `volumes:` command is to link a storage area on host machine to a place in the container.
+- the `networks:` section creates a network named `cruddur` that links both containers so that they can share information in the same network.
