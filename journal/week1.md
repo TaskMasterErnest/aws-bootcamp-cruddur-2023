@@ -313,3 +313,48 @@ ENTRYPOINT [ "./run-flask.sh" ]
 			driver: bridge
 			name: cruddur
 	```
+
+## 04. Adding HealthCheck configuration to the compose file
+- Built upon the initial steps above, a healthcheck configuration is added to the compose file.
+- This config checks whether the endpoints stated are working properly.
+```YAML
+	version: "3.8"
+	services:
+		backend-test:
+			environment:
+				FRONTEND_URL: "https://8080-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+				BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+			build:
+				context: ./backend-flask
+				dockerfile: Dockerfile.dev
+			ports:
+				- "4567:4567"
+			healthcheck:
+				test: curl --fail -s http://localhost:4567/api/activities/home || exit 1
+				interval: 30s
+				retries: 5
+				timeout: 30s
+			volumes:
+				- ./backend-flask:/backend-flask
+	
+		frontend-test:
+			environment:
+				REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+			build:
+				context: ./frontend-react-js
+				dockerfile: Dockerfile.dev
+			ports:
+				- "8080:80"
+			healthcheck:
+				test: curl --fail -s http://localhost:8080/ || exit 1
+				interval: 30s
+				retries: 5
+				timeout: 30s
+			volumes:
+				- ./frontend-react-js:/frontend-react-js
+	networks:
+		internal-network:
+			driver: bridge
+			name: cruddur
+```
+
