@@ -224,7 +224,8 @@ ENTRYPOINT [ "./run-flask.sh" ]
 - Use the `docker push` command with the name of the preferred image (with the right tag) to push it to the docker repo in DockerHub.
 	```Shell
 	docker push ernestklu/aws-cruddur-app:v1
-
+	```
+	![Push To DockerHub](./assets/Week1/HW02-003.png)
 
 ## 03. Multi-stage build of the Dockerfile(s)
 1.
