@@ -280,3 +280,37 @@ ENTRYPOINT [ "./run-flask.sh" ]
 	EXPOSE 8080
 	```
 - The build image reduces from 1.19GB to 25MB.
+
+3.
+- Create a `docker-compose-dev.yaml` file in the root of the project directory. 
+- With this new docker-compose configuration, you can leverage the multi-stage builds to create a working application on a single docker network.
+	```YAML
+	version: "3.8"
+	services:
+		backend-test:
+			environment:
+				FRONTEND_URL: "https://8080-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+				BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+			build:
+				context: ./backend-flask
+				dockerfile: Dockerfile.dev
+			ports:
+				- "4567:4567"
+			volumes:
+				- ./backend-flask:/backend-flask
+	
+		frontend-test:
+			environment:
+				REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+			build:
+				context: ./frontend-react-js
+				dockerfile: Dockerfile.dev
+			ports:
+				- "8080:80"
+			volumes:
+				- ./frontend-react-js:/frontend-react-js
+	networks:
+		internal-network:
+			driver: bridge
+			name: cruddur
+	```
