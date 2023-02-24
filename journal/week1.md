@@ -224,3 +224,59 @@ ENTRYPOINT [ "./run-flask.sh" ]
 - Use the `docker push` command with the name of the preferred image (with the right tag) to push it to the docker repo in DockerHub.
 	```Shell
 	docker push ernestklu/aws-cruddur-app:v1
+
+
+## 03. Multi-stage build of the Dockerfile(s)
+1.
+- Multi-stage builds are meant to reduce the size of an image that will be put into production.
+- Create a new file called `Dockerfile.dev` in the `/backend-flask` folder in the repo.
+- Cut down on the size of the build by using `python3:10-alpine` as the base image.
+	```Dockerfile
+	FROM python:3.10-alpine
+	
+	WORKDIR /backend-flask
+	
+	COPY requirements.txt requirements.txt
+	
+	RUN pip3 install -r requirements.txt
+
+	FROM 
+	
+	COPY . .
+	
+	ENV FLASK_ENV=development
+	
+	EXPOSE 4567
+	
+	CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
+	```
+- The build image using this new image from 152MB to 61.3MB. 
+
+
+2.
+- Multi-stage building really shines when building the front-end react application.
+- Create a new file called `Dockerfile.dev` in the `/frontend-react-js` directory and populate it with the code below.
+	- the run `npm run build` isto create a build directory with a production build of the application.
+	- the build directory contains static files of the CSS, HTML and JS scripts needed to run the application.
+	- Copy the build directory from the initial build stage and then host these files in an NGINX container.
+	- NGINX runs on port 80 by default, map it to any port you wish on the local host.
+	```Dockerfile
+	FROM node:16.19-alpine AS build
+
+	WORKDIR /frontend-react-js
+	
+	COPY package.json .
+	
+	RUN npm install
+	
+	COPY . .
+	
+	RUN npm run build
+
+	FROM nginx:stable-alpine
+	
+	COPY --from=build /frontend-react-js/build /usr/share/nginx/html
+
+	EXPOSE 8080
+	```
+- The build image reduces from 1.19GB to 25MB.
