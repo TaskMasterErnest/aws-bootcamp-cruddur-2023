@@ -158,3 +158,69 @@
 - If the images are not already built or present, the `build:` command specifies which directory to enter and build the image from.
 - the `volumes:` command is to link a storage area on host machine to a place in the container.
 - the `networks:` section creates a network named `cruddur` that links both containers so that they can share information in the same network.
+.
+.
+.
+.
+# HOMEWORK CHALLENGES
+
+### 01. Running CMD from an external script
+- The goal is to write the script in a file and reference that script in the code to run it
+- Open a new `.sh` file preferably in the same directory as the Dockerfile, name it `run-flask.sh`. Add the code to run when referenced in the file as shown:
+	- this is how to run a flask module without the `python3 -m` preamble
+	```Shell
+	#!/bin/bash
+	flask run --host=0.0.0.0 --port=4567	
+	```
+- In the Dockerfile where the external script is to be referenced, change the configuration code to match this.
+	- the `chmod +x ./run-flask.sh` code enables permissions for the user to run the file.
+	- the `ENTRYPOINT` command makes sure the command in the [] is the first command to run when the container is run
+		- an alternative is to use the `CMD [ "bash", "./run-flask.sh" ]` in place of the `ENTRYPOINT` command.
+```Dockerfile
+FROM python:3.10-slim-buster
+
+WORKDIR /backend-flask
+
+COPY requirements.txt requirements.txt
+
+RUN pip3 install -r requirements.txt
+
+COPY . .
+
+ENV FLASK_ENV=development
+
+EXPOSE ${PORT}
+
+RUN chmod +x ./run-flask.sh
+
+ENTRYPOINT [ "./run-flask.sh" ]
+```
+- Build the image with the `docker build` command and test run it with the `docker run` command with the necessary flags.
+
+
+### 02. Pushing an image to DockerHub
+- Go to DockerHub, create an account and sign in (remember the password and username).
+- Create a new repository in DockerHub; could be a public repo or private repo.
+- Spell out the name you want for the repo.
+- Go to the command-line and set the DockerHub username and password as environment variables.
+	- a safer way would be to use Docker Secrets.
+	```Shell
+	export DOCKER_USERNAME="username"
+	export DOCKER_PASSWORD="password"
+	```
+- To push an image, you must build it and have it present on the local machine.
+- You must then tag the image in the way that matches the repo it will be sent to with the `docker tag` command.
+	- ie. `image_name:tag` to `docker_repo_name:tag` 
+	```Shell
+	docker tag backend-flask:latest ernestklu/aws-cruddur-app:v1
+	```
+ 
+- Log in to Docker from the local machine using the `docker login` command.
+	- echo the password to the `docker login` command to make sure the password is not persisted on the CLI.
+	```Shell
+	echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+	```
+
+- Use the `docker push` command with the name of the preferred image (with the right tag) to push it to the docker repo in DockerHub.
+	```Shell
+	docker push ernestklu/aws-cruddur-app:v1
