@@ -317,7 +317,7 @@ ENTRYPOINT [ "./run-flask.sh" ]
 ## 04. Adding HealthCheck configuration to the compose file
 - Built upon the initial steps above, a healthcheck configuration is added to the compose file.
 - This config checks whether the endpoints stated are working properly.
-```YAML
+	```YAML
 	version: "3.8"
 	services:
 		backend-test:
@@ -356,5 +356,4 @@ ENTRYPOINT [ "./run-flask.sh" ]
 		internal-network:
 			driver: bridge
 			name: cruddur
-```
-
+	```
