@@ -1,14 +1,13 @@
-FROM node:16.18-alpine as builder
+FROM node:16.18
 
-WORKDIR /intermediate
-COPY . .
-RUN npm install
+ENV PORT=3000
 
-FROM node:16.18-alpine
+COPY . /frontend-react-js
 
-WORKDIR /app
-COPY --from=builder /intermediate .
+WORKDIR /frontend-react-js
+
 RUN npm install
 
 EXPOSE ${PORT}
+
 CMD ["npm", "start"]
