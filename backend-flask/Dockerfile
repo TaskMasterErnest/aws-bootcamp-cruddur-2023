@@ -10,8 +10,6 @@ COPY . .
 
 ENV FLASK_ENV=development
 
-EXPOSE 4567
+EXPOSE ${PORT}
 
-RUN chmod +x ./run-flask.sh
-
-ENTRYPOINT [ "./run-flask.sh" ]
+CMD [ "python", "-m", "flask", "run", "--host=0.0.0.0", "--port=4567"]
