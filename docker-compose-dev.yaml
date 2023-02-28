@@ -23,5 +23,5 @@ services:
       - ./frontend-react-js:/frontend-react-js
 networks:
   internal-network:
-		driver: bridge
+    driver: bridge
     name: cruddur
