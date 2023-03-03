@@ -216,3 +216,62 @@ AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
 ```
    8. Run the docker-compose file to run up all the containers.
    9. Go to the AWS X-Ray console, click on Traces, the traces will be there.
+
+
+## 3. Using CloudWatch Logs
+
+ - Add `watchtower` to the requirements.txt file in the `/backend-flask` folder and install the requirements.
+ - Add the following code to the `app.py` file to configure CloudWatch logging for the app.
+```Python
+import watchtower
+import logging
+from time import strftime
+
+...
+
+# Configuring Logger to Use CloudWatch
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
+LOGGER.addHandler(console_handler)
+LOGGER.addHandler(cw_handler)
+LOGGER.info("Test Log")
+```
+
+- After every request, we want to log the request and an error, so we put on this code to do that after every request. This should go just before the `@app.route("/api/message_groups", methods=['GET'])` endpoint.
+```Python
+@app.after_request
+def after_request(response):
+    timestamp = strftime('[%Y-%b-%d %H:%M]')
+    LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+    return response
+```
+- Brace yourself, we are going to activate a lot of things here.
+- We are now going to implement logging in the `home_activites.py` file. The code in `home_activities.py` should look like this:
+```Python
+from datetime import datetime, timedelta, timezone
+from opentelemetry import trace
+
+tracer = trace.get_tracer("home.activities")
+
+class HomeActivities:
+	def run(Logger):
+		logger.info("Home Activities")
+		with tracer.start_as_current_span("home-actvities-mock-data"):
+		span = trace.get_current_span()
+```
+- The code in `app.py` should look like this; in the `@app.route("/api/activities/home", methods...` endpoint code
+```Python
+@app.route("/api/activities/home", methods=['GET'])
+def data_home():
+	data = HomeActivities.run(logger=LOGGER)
+	return data, 200
+```
+- Essentially, we are parsing the Logger function to pick up and register logs when we hit the `/api/activities/home` endpoint. 
+- We get a response(s) that is(are) logged into CloudWatch logs.
+- In order for CloudWatch to have access to our AWS environment and log in there, we add these env-vars to take care of that; put them in the docker-compose file, under the backend service.
+```Shell
+AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
+AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
