@@ -128,3 +128,91 @@ By adding the "app.now" atribute to the span, it becomes easier to understand wh
 span.set_attribute("app.result_length", len(results)) is used to set an attribute on the current span being executed, indicating the length of the `results` list that will be returned from the function, and then returning the `results` list itself.
 ```
 Spin up the application again and hit the `/api/activities/home` endpoint and check the trace in the Honeycomb app.
+
+
+## 2. Tracing Using AWS X-Ray
+- X-Ray is AWS' way to track traces in our applications. It allows the user to analyze and debug distributed applications in real-time.
+- To use X-Ray, there has to be a sidecar container running an X-Ray daemon alongside the user application.
+	- The X-Ray daemon is a lightweight, open-source application that runs on an EC2 instance, a container, or a Lambda function.
+	- The X-Ray daemon collects trace data from the application, including segment and subsegment information, and sends it to the AWS X-Ray service for analysis and visualization.
+	- The X-Ray daemon provides flexibility in how you instrument the application, allowing you to use either the X-Ray SDK or the X-Ray daemon's API to capture trace data.
+In this case, I am using the X-Ray SDK to instrument tracing for my application.
+- Using the aws-xray-sdk for Python documentation as a guide, I started initializing AWS X-Ray.
+	1. Add a line of code to the `/backend-flask/requirements.txt` file. Install using the `pip` command.
+```Text
+aws-xray-sdk
+```
+   2. Add the following line to the `/backend-flask/app.py` file. 
+   - Rewrite the service name to match the particular service we are working with ie. `service='backend-flask'`.
+   - this code imports the X-Ray libraries from the aws-xray-sdk for Python.
+```Python
+# AWS X-RAY ----------
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
+
+xray_url = os.getenv("AWS_XRAY_URL")
+xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
+```
+   3. Add the following line of code to the `/backend-flask/app.py` file; it should look like this:
+```Python
+# app = Flask(__name__)
+# AWS X-RAY ----------
+XRayMiddleware(app, xray_recorder)
+```
+   4. Add json configuration for sampling traces in x-ray in the `aws/json/xray.json` file; use this: (change ServiceName to backend-flask).
+```Json
+{
+  "SamplingRule": {
+      "RuleName": "Cruddur",
+      "ResourceARN": "*",
+      "Priority": 9000,
+      "FixedRate": 0.1,
+      "ReservoirSize": 5,
+      "ServiceName": "backend-flask",
+      "ServiceType": "*",
+      "Host": "*",
+      "HTTPMethod": "*",
+      "URLPath": "*",
+      "Version": 1
+  }
+}
+```
+   5. Go to AWS X-Ray tab in the AWS console, try to launch a trace but cancel before you actually launch it.
+	- it takes you back to the AWS X-Ray page where you can click on Configuration and get a Groups under it.
+	- we will now create a log group that will keep all the logs we will be generating from the backend service.
+```Shell
+aws xray create-group \
+	--group-name "Cruddur" \
+	--filter-expression "service(\"backend-flask\")"
+```
+	- make sure service name is `backend-flask` and the group name is `Cruddur`.
+	NB: you must have you AWS CLI configured to work with the environment you are working in eg. gitpod
+	check out the log group under CloudWatch, under X-Ray Traces, under Traces.
+   6. Create a sampling rule using the AWS CLI:
+```Shell
+aws xray create-sampling-rule --cli-input-json file://aws/json/xray.json
+```
+	- check to see if the sampling rule is available
+   7. At this stage, we want to run X-Ray as a container alongside our backend application.
+	- The region has been hardcoded into it.
+	- make sure to have the AWS access key and secret access keys available for that environment.
+```Shell
+xray-daemon:
+  image: "amazon/aws-xray-daemon"
+  environment:
+	AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+	AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+	AWS_REGION: "eu-west-2"
+  command:
+	- "xray -o -b xray-daemon:2000"
+  ports:
+	- 2000:2000/udp
+```
+
+- and we add these env-vars to the backend service in the same docker-compose file
+```Shell
+AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
+AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
+```
+   8. Run the docker-compose file to run up all the containers.
+   9. Go to the AWS X-Ray console, click on Traces, the traces will be there.
