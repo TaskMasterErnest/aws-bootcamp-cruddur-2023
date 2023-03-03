@@ -18,7 +18,7 @@ services:
       context: ./frontend-react-js
       dockerfile: Dockerfile.dev
     ports:
-      - "3000:3000"
+      - "8080:80"
     volumes:
       - ./frontend-react-js:/frontend-react-js
 networks:
