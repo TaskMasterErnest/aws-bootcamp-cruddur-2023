@@ -275,3 +275,65 @@ def data_home():
 AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
 AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
 AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+```
+
+## 4. Rollbar Logs
+- Rollbar. create an account and go through the process.
+- Skip add apps, and in the Add SDK section, select Flask and continue.
+- Ignore the setup-SDK page and add the following into the `/backend-flask/requirements.txt` file.
+
+```Shell
+blinker
+rollbar
+```
+
+- install them with the `pip install -r requirements.txt` command.
+
+- Set the Rollbar Access Token; access token is found on the page that lets you set up the SDK. Pick that access token.
+
+```Shell
+export ROLLBAR_ACCESS_TOKEN="[*redacted*]"
+gp env ROLLBAR_ACCESS_TOKEN="[*redacted*]"
+```
+- Reference the access token in the docker-compose file in the backend service.
+```YAML
+ROLLBAR_ACCESS_TOKEN: "${ROLLBAR_ACCESS_TOKEN}"
+```
+- Initialize rollbar in the `app.py` file, with the following code:
+```Python
+import os
+import rollbar
+import rollbar.contrib.flask
+from flask import got_request_exception
+```
+- Put this code into the `app.py` file under the Flask run app, like this:
+```Python
+app = Flask(__name__)
+
+rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
+@app.before_first_request
+def init_rollbar():
+    """init rollbar module"""
+    rollbar.init(
+        # access token
+        rollbar_access_token,
+        # environment name
+        'production',
+        # server root directory, makes tracebacks prettier
+        root=os.path.dirname(os.path.realpath(__file__)),
+        # flask already sets up logging
+        allow_logging_basic_config=False)
+
+    # send exceptions from `app` to rollbar, using flask's signal system.
+    got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
+```
+- this code sets up Rollbar to log exceptions and errors that occur within the Flask app, using the provided Rollbar access token and environment name. It also configures Rollbar to use Flask's built-in signal system to catch exceptions and send them to the Rollbar logging service.
+- Add an endpoint to test the rollbar app when it comes up and is hit:
+	- place this code right under the code above.
+```Python
+@app.route('/rollbar/test')
+def rollbar_test():
+    rollbar.report_message('Hello World!', 'warning')
+    return "Hello World!"
+```
+- Start up the application.
