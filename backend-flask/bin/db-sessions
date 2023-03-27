@@ -4,7 +4,7 @@ NO_COLOR='\033[0m'
 LABEL="db-sessions"
 printf "${CYAN}== ${LABEL}${NO_COLOR}\n"
 
-if [ "$1" == 'prod']; then
+if [ "$1" == 'prod' ]; then
 	echo "Running in production mode..."
 	URL=$RDS_CONNECTION_URL
 else
