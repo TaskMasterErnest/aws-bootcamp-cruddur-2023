@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from opentelemetry import trace
 
-from lib.db import db
+from lib.postgresdb import db
 
 #tracer = trace.get_tracer("home.activities")
 

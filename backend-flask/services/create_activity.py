@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from lib.db import db
+from lib.postgresdb import db
 
 class CreateActivity:
   def create_activity(handle, message, expires_at):
