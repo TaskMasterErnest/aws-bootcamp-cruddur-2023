@@ -3,6 +3,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 import uuid
 import os
+import botocore.exceptions
 
 #setting up a stateless class
 class Ddb:
