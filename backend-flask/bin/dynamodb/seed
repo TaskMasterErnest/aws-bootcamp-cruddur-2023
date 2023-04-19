@@ -38,11 +38,11 @@ def get_user_uuids():
 	# the names in here should match the names in the /db/seed.sql data
 	# you must run the postgresDB and seed it (use /postgresDB/setup script)
   users = db.query_array_json(sql,{
-    'my_handle':  'andrewbrown',
-    'other_handle': 'bayko'
+    'my_handle':  'taskmaster',
+    'other_handle': 'Ernest'
   })
-  my_user    = next((item for item in users if item["handle"] == 'andrewbrown'), None)
-  other_user = next((item for item in users if item["handle"] == 'bayko'), None)
+  my_user    = next((item for item in users if item["handle"] == 'taskmaster'), None)
+  other_user = next((item for item in users if item["handle"] == 'Ernest'), None)
   results = {
     'my_user': my_user,
     'other_user': other_user
@@ -237,7 +237,7 @@ for i in range(len(lines)):
     print(lines[i])
     raise 'invalid line'
 
-  created_at = (now + timedelta(minutes=i)).isoformat()
+  created_at = (now + timedelta(hours=-3) + timedelta(minutes=i)).isoformat()
   create_message(
     client=dynamodb,
     message_group_uuid= message_group_uuid,

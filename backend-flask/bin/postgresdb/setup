@@ -9,3 +9,6 @@ source "$bin_path/postgresdb/drop"
 source "$bin_path/postgresdb/create"
 source "$bin_path/postgresdb/schema-load"
 source "$bin_path/postgresdb/seed"
+python "$bin_path/postgresdb/update_cognito_user_ids"
+
+echo "##### SUCCESSFULLY SET UP POSTGRES #####"
