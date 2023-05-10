@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  backend-test:
+  backend-flask:
     environment:
       #CONNECTION_URL: "${RDS_CONNECTION_URL}"
       # CONNECTION_URL: "postgresql://postgres:password@postgres:5432/cruddur"
@@ -25,7 +25,7 @@ services:
       - "4567:4567"
     volumes:
       - ./backend-flask:/backend-flask
-  frontend-test:
+  frontend-react-js:
     environment:
       REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
       REACT_APP_AWS_PROJECT_REGION: "{AWS_DEFAULT_REGION}"
