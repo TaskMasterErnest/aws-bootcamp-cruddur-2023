@@ -60,7 +60,6 @@ export default function MessageGroupPage() {
     //prevents double call
     if (dataFetchedRef.current) return;
     dataFetchedRef.current = true;
-
     loadMessageGroupsData();
     loadMessageGroupData();
     checkAuth(setUser);
