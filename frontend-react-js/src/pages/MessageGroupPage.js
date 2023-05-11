@@ -9,7 +9,7 @@ import MessagesFeed from '../components/MessageFeed';
 import MessagesForm from '../components/MessageForm';
 
 export default function MessageGroupPage() {
-  const [messageGroups, setMessageGroups] = React.useState([]);``
+  const [messageGroups, setMessageGroups] = React.useState([]);
   const [messages, setMessages] = React.useState([]);
   const [popped, setPopped] = React.useState([]);
   const [user, setUser] = React.useState(null);
