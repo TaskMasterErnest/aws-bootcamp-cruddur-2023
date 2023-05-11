@@ -43,7 +43,7 @@
           {"name": "OTEL_SERVICE_NAME", "value": "backend-flask"},
           {"name": "OTEL_EXPORTER_OTLP_ENDPOINT", "value": "https://api.honeycomb.io"},
           {"name": "AWS_COGNITO_USER_POOL_ID", "value": "eu-west-2_uEICac8VL"},
-          {"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": "5b6ro31g97urk767adrbrdj1g5"},
+          {"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": "hodtei9aau4ai8gncgtmgnrto"},
           {"name": "FRONTEND_URL", "value": "*"},
           {"name": "BACKEND_URL", "value": "*"},
           {"name": "AWS_DEFAULT_REGION", "value": "eu-west-2"}
@@ -51,7 +51,7 @@
         "secrets": [
           {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:eu-west-2:478429420160:parameter/cruddur/backend-flask/AWS_ACCESS_KEY_ID"},
           {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:eu-west-2:478429420160:parameter/cruddur/backend-flask/AWS_SECRET_ACCESS_KEY"},
-          {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:eu-west-2:478429420160:parameter/cruddur/backend-flask/RDS_CONNECTION_URL" },
+          {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:eu-west-2:478429420160:parameter/cruddur/backend-flask/CONNECTION_URL" },
           {"name": "ROLLBAR_ACCESS_TOKEN" , "valueFrom": "arn:aws:ssm:eu-west-2:478429420160:parameter/cruddur/backend-flask/ROLLBAR_ACCESS_TOKEN" },
           {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:eu-west-2:478429420160:parameter/cruddur/backend-flask/OTEL_EXPORTER_OTLP_HEADERS" }
         ]
