@@ -2,13 +2,13 @@ version: "3.8"
 services:
   backend-flask:
     environment:
-      #CONNECTION_URL: "${RDS_CONNECTION_URL}"
+      CONNECTION_URL: "${RDS_CONNECTION_URL}"
       # CONNECTION_URL: "postgresql://postgres:password@postgres:5432/cruddur"
       #AWS_ENDPOINT_URL: "http://dynamodb-local:8000"
       FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
       BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
       OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
-      OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=TsAdpCGwBhWtE377l7HNoD"
+      OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
       OTEL_SERVICE_NAME: 'backend-flask'
       AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
       AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
@@ -18,9 +18,7 @@ services:
       ROLLBAR_ACCESS_TOKEN: "${ROLLBAR_ACCESS_TOKEN}"
       AWS_COGNITO_USER_POOL_ID: "eu-west-2_uEICac8VL"
       AWS_COGNITO_USER_POOL_CLIENT_ID: "hodtei9aau4ai8gncgtmgnrto"
-    build: 
-      context: ./backend-flask
-      dockerfile: Dockerfile
+    build: ./backend-flask
     ports:
       - "4567:4567"
     volumes:
