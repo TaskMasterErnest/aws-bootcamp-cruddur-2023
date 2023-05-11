@@ -19,7 +19,7 @@
                         "ssm:GetParameters",
                         "ssm:GetParameter"
                 ],
-                "Resource": "arn:aws:ssm:eu-west-2:478429420160:parameter/cruddur/backend-flask"
+                "Resource": "arn:aws:ssm:eu-west-2:478429420160:parameter/cruddur/backend-flask/*"
             }
     ]
 }
