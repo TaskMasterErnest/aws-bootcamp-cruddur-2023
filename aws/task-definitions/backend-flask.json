@@ -44,8 +44,8 @@
           {"name": "OTEL_EXPORTER_OTLP_ENDPOINT", "value": "https://api.honeycomb.io"},
           {"name": "AWS_COGNITO_USER_POOL_ID", "value": "eu-west-2_uEICac8VL"},
           {"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": "hodtei9aau4ai8gncgtmgnrto"},
-          {"name": "FRONTEND_URL", "value": "*"},
-          {"name": "BACKEND_URL", "value": "*"},
+          {"name": "FRONTEND_URL", "value": "https://thetaskmasterernest.cyou"},
+          {"name": "BACKEND_URL", "value": "https://api.thetaskmasterernest.cyou"},
           {"name": "AWS_DEFAULT_REGION", "value": "eu-west-2"}
         ],
         "secrets": [
