@@ -9,7 +9,7 @@ import os
 #finding the /lib directory in the codebase
 current_path = os.path.dirname(os.path.abspath(__file__))
 #you move up from /dynamoDB and out of /bin
-parent_path = os.path.abspath(os.path.join(current_path, '..', '..'))
+parent_path = os.path.abspath(os.path.join(current_path, '..', '..','backend-flask'))
 sys.path.append(parent_path)
 from lib.postgresdb import db
 
