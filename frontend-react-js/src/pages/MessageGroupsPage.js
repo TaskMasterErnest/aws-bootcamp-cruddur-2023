@@ -32,7 +32,7 @@ export default function MessageGroupsPage() {
     } catch (err) {
       console.log(err);
     }
-  };   
+  };    
 
   React.useEffect(()=>{
     //prevents double call
