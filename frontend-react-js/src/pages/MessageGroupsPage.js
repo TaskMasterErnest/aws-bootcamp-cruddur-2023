@@ -5,7 +5,6 @@ import DesktopNavigation  from '../components/DesktopNavigation';
 import MessageGroupFeed from '../components/MessageGroupFeed';
 import {checkAuth, getAccessToken} from '../lib/CheckAuth';
 
-
 export default function MessageGroupsPage() {
   const [messageGroups, setMessageGroups] = React.useState([]);
   const [popped, setPopped] = React.useState([]);
@@ -30,9 +29,10 @@ export default function MessageGroupsPage() {
         console.log(res)
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  };    
+  };  
+
 
   React.useEffect(()=>{
     //prevents double call

@@ -31,7 +31,7 @@ export default function MessageGroupPage() {
         console.log(res)
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   };  
 
@@ -55,7 +55,7 @@ export default function MessageGroupPage() {
     } catch (err) {
       console.log(err);
     }
-  }; 
+  };  
 
   React.useEffect(()=>{
     //prevents double call

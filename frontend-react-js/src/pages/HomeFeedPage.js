@@ -36,7 +36,7 @@ export default function HomeFeedPage() {
         console.log(res)
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   };
 
