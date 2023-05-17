@@ -59,8 +59,10 @@ class Db:
       self.print_sql_err(err)
 
   # when we want to return a a single value
-  def query_value(self,sql,params={}):
-    self.print_sql('value',sql,params)
+  def query_value(self, sql, params={}, verbose=True):
+    if verbose:
+      self.print_sql('value',sql,params)
+      
     with self.pool.connection() as conn:
       with conn.cursor() as cur:
         cur.execute(sql,params)
@@ -91,6 +93,7 @@ class Db:
           return "{}"
         else:
           return json[0]
+          
   def query_wrap_object(self,template):
     sql = f"""
     (SELECT COALESCE(row_to_json(object_row),'{{}}'::json) FROM (
@@ -98,6 +101,7 @@ class Db:
     ) object_row);
     """
     return sql
+
   def query_wrap_array(self,template):
     sql = f"""
     (SELECT COALESCE(array_to_json(array_agg(row_to_json(array_row))),'[]'::json) FROM (
@@ -105,6 +109,7 @@ class Db:
     ) array_row);
     """
     return sql
+
   def print_sql_err(self,err):
     # get details about the exception
     err_type, err_obj, traceback = sys.exc_info()
@@ -119,4 +124,5 @@ class Db:
     # print the pgcode and pgerror exceptions
     print ("pgerror:", err.pgerror)
     print ("pgcode:", err.pgcode, "\n")
+
 db = Db()
