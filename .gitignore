@@ -1,0 +1,6 @@
+# docker image packaging build
+docker/**/*
+frontend-react-js/build/*
+
+# exclude the ruby generated files
+*.env
