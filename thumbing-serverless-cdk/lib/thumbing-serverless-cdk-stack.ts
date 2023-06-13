@@ -43,12 +43,12 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     );
 
     // create topic and subscription
-    const snsTopic = this.createSnsTopic(topicName)
-    this.createSnsSubscription(snsTopic,webhookUrl)
+    // const snsTopic = this.createSnsTopic(topicName)
+    // this.createSnsSubscription(snsTopic,webhookUrl)
 
     // add our s3 event notifications
-    this.createS3NotifyToLambda(folderInput,lambda,uploadsBucket)
-    this.createS3NotifyToSns(folderOutput,snsTopic,assetsBucket)
+    // this.createS3NotifyToLambda(folderInput,lambda,uploadsBucket)
+    // this.createS3NotifyToSns(folderOutput,snsTopic,assetsBucket)
 
     // create S3 bucket policies
     const s3UploadsReadWritePolicy = this.createPolicyBucketAccess(uploadsBucket.bucketArn)
@@ -112,29 +112,29 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     return s3ReadWritePolicy;
   }
 
-  createSnsTopic(topicName: string): sns.ITopic{
-    const logicalName = "ThumbingTopic";
-    const snsTopic = new sns.Topic(this, logicalName, {
-      topicName: topicName
-    });
-    return snsTopic;
-  }
+  // createSnsTopic(topicName: string): sns.ITopic{
+  //   const logicalName = "ThumbingTopic";
+  //   const snsTopic = new sns.Topic(this, logicalName, {
+  //     topicName: topicName
+  //   });
+  //   return snsTopic;
+  // }
 
-  createSnsSubscription(snsTopic: sns.ITopic, webhookUrl: string): sns.Subscription {
-    const snsSubscription = snsTopic.addSubscription(
-      new subscriptions.UrlSubscription(webhookUrl)
-    )
-    return snsSubscription;
-  }
+  // createSnsSubscription(snsTopic: sns.ITopic, webhookUrl: string): sns.Subscription {
+  //   const snsSubscription = snsTopic.addSubscription(
+  //     new subscriptions.UrlSubscription(webhookUrl)
+  //   )
+  //   return snsSubscription;
+  // }
 
-  createS3NotifyToSns(prefix: string, snsTopic: sns.ITopic, bucket: s3.IBucket): void {
-    const destination = new s3n.SnsDestination(snsTopic)
-    bucket.addEventNotification(
-      s3.EventType.OBJECT_CREATED_PUT, 
-      destination,
-      {prefix: prefix}
-    );
-  }
+  // createS3NotifyToSns(prefix: string, snsTopic: sns.ITopic, bucket: s3.IBucket): void {
+  //   const destination = new s3n.SnsDestination(snsTopic)
+  //   bucket.addEventNotification(
+  //     s3.EventType.OBJECT_CREATED_PUT, 
+  //     destination,
+  //     {prefix: prefix}
+  //   );
+  // }
 
     /*
   createPolicySnSPublish(topicArn: string){
