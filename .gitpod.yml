@@ -38,6 +38,12 @@ tasks:
       cd thumbing-serverless-cdk
       cp .env.example .env
       npm i
+  - name: lambda
+    before: |
+      cd aws/json/lambda/process-images
+      npm i sharp
+      npm install @aws-sdk/client-s3
+      
 vscode:
   extensions:
     - 42Crunch.vscode-openapi
