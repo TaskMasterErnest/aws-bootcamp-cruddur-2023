@@ -29,8 +29,7 @@ export default function ProfileForm(props) {
           'Authorization': `Bearer ${access_token}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        }
-      })
+      }})
       let data = await res.json();
       if (res.status === 200) {
         return data.url
@@ -44,6 +43,7 @@ export default function ProfileForm(props) {
   const s3upload = async (event)=> {
     console.log('event',event)
     const file = event.target.files[0]
+    console.log('file',file)
     const filename = file.name
     const size = file.size
     const type = file.type
@@ -52,6 +52,7 @@ export default function ProfileForm(props) {
     const fileparts = filename.split('.')
     const extension = fileparts[fileparts.length-1]
     const presignedurl = await s3uploadkey(extension)
+    console.log('presignedURL',presignedurl)
     try {
       console.log('s3upload')
       const res = await fetch(presignedurl, {
