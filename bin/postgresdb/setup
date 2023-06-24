@@ -14,5 +14,6 @@ source "$DB_PATH/create"
 source "$DB_PATH/schema-load"
 source "$DB_PATH/seed"
 python "$DB_PATH/update_cognito_user_ids"
+python "$THEIA_WORKSPACE_ROOT/bin/postgresdb/migrate"
 
 echo "##### SUCCESSFULLY SET UP POSTGRES #####"

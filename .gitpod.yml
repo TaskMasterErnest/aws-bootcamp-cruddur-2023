@@ -19,10 +19,12 @@ tasks:
       source  "$THEIA_WORKSPACE_ROOT/bin/rds/update-sg-rule"
   - name: react-js
     command: |
+      ruby "$THEIA_WORKSPACE_ROOT/bin/frontend/generate-env"
       cd frontend-react-js
       npm i
   - name: flask
     command: |
+      ruby "$THEIA_WORKSPACE_ROOT/bin/backend/generate-env"
       cd backend-flask
       pip install -r requirements.txt
   - name: fargate 
@@ -38,6 +40,12 @@ tasks:
       cd thumbing-serverless-cdk
       cp .env.example .env
       npm i
+  - name: lambda
+    before: |
+      cd aws/json/lambda/process-images
+      npm i sharp
+      npm install @aws-sdk/client-s3
+      
 vscode:
   extensions:
     - 42Crunch.vscode-openapi
