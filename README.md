@@ -9,7 +9,7 @@ This is the starting codebase that will be used in the FREE AWS Cloud Project Bo
 
 ![Cruddur Screenshot](_docs/assets/cruddur-screenshot.png)
 
-## Instructions!
+## Instructions
 
 At the start of the bootcamp you need to create a new Github Repository from this template.
 
