@@ -35,7 +35,7 @@ Parameters:
     Default: backend-flask
   EcrImage:
     Type: String
-    Default: "366939446291.dkr.ecr.us-east-1.amazonaws.com/backend-flask:latest"
+    Default: "478429420160.dkr.ecr.eu-west-2.amazonaws.com/backend-flask:latest"
   EnvOtelServiceName:
     Type: String
     Default: backend-flask
@@ -44,10 +44,10 @@ Parameters:
     Default: https://api.honeycomb.io
   EnvAWSCognitoUserPoolId:
     Type: String
-    Default: us-east-1_GN7uh5LmT
+    Default: eu-west-2_uEICac8VL
   EnvCognitoUserPoolClientId:
     Type: String
-    Default: 3imco9n5ju2bngsltjdvfvnusl
+    Default: hodtei9aau4ai8gncgtmgnrto
   EnvFrontendUrl:
     Type: String
     Default: "*"
