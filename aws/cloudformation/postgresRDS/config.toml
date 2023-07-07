@@ -1,0 +1,9 @@
+[deploy]
+bucket = 'cfn-artifacts-taskmaster'
+region = 'eu-west-2'
+stack_name = 'CrudDb'
+
+[parameters]
+NetworkingStack = 'CrudNet'
+ClusterStack = 'CrudCluster'
+MasterUsername = 'ernestcruddur'
