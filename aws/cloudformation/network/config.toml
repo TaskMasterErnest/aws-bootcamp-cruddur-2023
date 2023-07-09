@@ -1,0 +1,4 @@
+[deploy]
+bucket = 'cfn-artifacts-taskmaster'
+region = 'eu-west-2'
+stack_name = 'CrudNet'
