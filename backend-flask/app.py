@@ -18,12 +18,12 @@ import routes.messages
 
 app = Flask(__name__)
 
-# initialization --------
+## initalization --------
 init_xray(app)
 init_honeycomb(app)
 init_cors(app)
 with app.app_context():
-    g.rollbar = init_rollbar(app)
+  g.rollbar = init_rollbar(app)
 
 # load routes -----------
 routes.general.load(app)
@@ -32,4 +32,4 @@ routes.users.load(app)
 routes.messages.load(app)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+  app.run(debug=True)
