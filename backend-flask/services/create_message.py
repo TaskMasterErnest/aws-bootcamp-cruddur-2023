@@ -26,12 +26,12 @@ class CreateMessage:
     if message == None or len(message) < 1:
       model['errors'] = ['message_blank'] 
     elif len(message) > 1024:
-      model['errors'] = ['message_exceed_max_chars'] 
+      model['errors'] = ['message_exceed_max_chars_1024'] 
 
     if model['errors']:
       # return what we provided
       model['data'] = {
-        'display_name': 'Taskmaster',
+        'display_name': 'The Taskmaster',
         'handle':  user_sender_handle,
         'message': message
       }
@@ -57,11 +57,11 @@ class CreateMessage:
       print("USERS=[other-user]==")
       print(other_user)
 
-      dynamodb = Ddb.client()
+      ddb = Ddb.client()
 
       if (mode == "update"):
         data = Ddb.create_message(
-          client=dynamodb,
+          client=ddb,
           message_group_uuid=message_group_uuid,
           message=message,
           my_user_uuid=my_user['uuid'],
@@ -70,7 +70,7 @@ class CreateMessage:
         )
       elif (mode == "create"):
         data = Ddb.create_message_group(
-          client=dynamodb,
+          client=ddb,
           message=message,
           my_user_uuid=my_user['uuid'],
           my_user_display_name=my_user['display_name'],

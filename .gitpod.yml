@@ -45,7 +45,23 @@ tasks:
       cd aws/json/lambda/process-images
       npm i sharp
       npm install @aws-sdk/client-s3
-      
+  - name: cloudformation
+    before: |
+      bundle update --bundler
+      pip install cfn-lint
+      cargo install cfn-guard
+      gem install cfn-toml
+      gem install dotenv
+      gem install aws_s3_website_sync
+  - name: aws-sam
+    before: |
+      cd /workspace
+      wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
+      unzip aws-sam-cli-linux-x86_64.zip -d sam-installation
+      sudo ./sam-installation/install
+      sudo rm -rf ./aws-sam-cli-linux-x86_64.zip
+      sudo rm -rf ./sam-installation
+      cd $THEIA_WORKSPACE_ROOT   
 vscode:
   extensions:
     - 42Crunch.vscode-openapi

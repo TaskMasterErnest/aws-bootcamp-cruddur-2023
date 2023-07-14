@@ -4,5 +4,7 @@ frontend-react-js/build/*
 
 # exclude the ruby generated files
 *.env
-
+docker/dynamodb
 node_modules
+build.toml
+tmp/*
