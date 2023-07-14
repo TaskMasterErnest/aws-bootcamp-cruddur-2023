@@ -3,7 +3,7 @@ INSERT INTO public.users (display_name, email, handle, cognito_user_id)
 VALUES
   ('The Taskmaster', 'kluernest08@gmail.com', 'thetaskmaster' ,'9f1f224b-a215-45e6-8476-206965f90261'),
   ('Londo Mollari','lmollari@centari.com' ,'londo' ,'MOCK'),
-  ('Alt Taskmaster', 'woeliernest@gmail.com', 'alt_taskmaster' ,'MOCK');
+  ('Alt Taskmaster', 'woeliernest@gmail.com', 'altmaster' ,'MOCK');
 
 INSERT INTO public.activities (user_uuid, message, expires_at)
 VALUES
@@ -13,7 +13,7 @@ VALUES
     current_timestamp + interval '10 day'
   ),
   (
-    (SELECT uuid from public.users WHERE users.handle = 'alt_taskmaster' LIMIT 1),
+    (SELECT uuid from public.users WHERE users.handle = 'altmaster' LIMIT 1),
     'I am the other seed data!',
     current_timestamp + interval '10 day'
   );

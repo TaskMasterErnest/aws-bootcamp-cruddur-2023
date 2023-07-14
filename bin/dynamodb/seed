@@ -39,7 +39,7 @@ def get_user_uuids():
 	# you must run the postgresDB and seed it (use /postgresDB/setup script)
   users = db.query_array_json(sql,{
     'my_handle':  'thetaskmaster',
-    'other_handle': 'alt_taskmaster'
+    'other_handle': 'altmaster'
   })
   my_user    = next((item for item in users if item["handle"] == 'taskmaster'), None)
   other_user = next((item for item in users if item["handle"] == 'Ernest'), None)
