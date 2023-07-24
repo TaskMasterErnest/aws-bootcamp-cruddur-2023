@@ -8,11 +8,11 @@ Parameters:
   NetworkingStack:
     Type: String
     Description: This is our base layer of networking components eg. VPC, Subnets
-    Default: CrudNet
+    Default: CrdNet
   ClusterStack:
     Type: String
     Description: This is our FargateCluster
-    Default: CrudCluster
+    Default: CrdCluster
   BackupRetentionPeriod:
     Type: Number
     Default: 0

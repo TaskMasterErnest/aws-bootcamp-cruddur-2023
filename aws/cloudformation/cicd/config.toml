@@ -1,11 +1,11 @@
 [deploy]
 bucket = 'cfn-artifacts-taskmaster'
 region = 'eu-west-2'
-stack_name = 'CrudCiCd'
+stack_name = 'CrdCiCd'
 
 [parameters]
-ServiceStack = 'CrudSrvBackendFlask'
-ClusterStack = 'CrudCluster'
+ServiceStack = 'CrdSrvBackendFlask'
+ClusterStack = 'CrdCluster'
 GitHubBranch = 'production'
 GithubRepo = 'TaskMasterErnest/aws-bootcamp-cruddur-2023'
 ArtifactBucketName = "codepipeline-cruddur-artifacts-taskmaster"
