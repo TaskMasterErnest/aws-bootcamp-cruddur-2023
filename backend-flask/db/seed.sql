@@ -1,9 +1,8 @@
 -- this file was manually created (because we might auto generate it in future)
 INSERT INTO public.users (display_name, email, handle, cognito_user_id)
 VALUES
-  ('The Taskmaster', 'kluernest08@gmail.com', 'thetaskmaster' ,'MOCK'),
-  ('Londo Mollari','lmollari@centari.com' ,'londo' ,'MOCK'),
-  ('Alt Taskmaster', 'woeliernest@gmail.com', 'altmaster' ,'MOCK');
+  ('The Taskmaster', 'klu@gmail.com', 'thetaskmaster' ,'MOCK'),
+  ('Alt Taskmaster', 'woeli@gmail.com', 'altmaster' ,'MOCK');
 
 INSERT INTO public.activities (user_uuid, message, expires_at)
 VALUES
