@@ -1,7 +1,7 @@
 [deploy]
 bucket = 'cfn-artifacts-taskmaster'
 region = 'eu-west-2'
-stack_name = 'CrudFrontend'
+stack_name = 'CrdFrontend'
 
 [parameters]
 CertificateArn = 'arn:aws:acm:us-east-1:478429420160:certificate/411874e2-74b2-4256-aef8-8e22e7b22d6d'
