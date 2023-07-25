@@ -6,4 +6,4 @@ stack_name = 'CrdSrvBackendFlask'
 [parameters]
 EnvFrontendUrl = 'https://thetaskmasterernest.cyou'
 EnvBackendUrl = 'https://api.thetaskmasterernest.cyou'
-DDBMessageTable = 'CrdDdb-DynamoDBTable-U6HOXTBDC6UM'
+DDBMessageTable = 'CrdDdb-DynamoDBTable-BED4YZSHSOJN'
